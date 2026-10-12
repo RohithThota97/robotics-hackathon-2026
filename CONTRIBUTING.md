@@ -20,13 +20,41 @@ git clone https://github.com/RohithThota97/robotics-hackathon-2026.git
 cd robotics-hackathon-2026
 ```
 
-Tell git who you are, using the email that is verified on your GitHub account
-(otherwise your commits will not link to your profile):
+Tell git who you are. The email has to be one that is verified on your GitHub
+account, or your commits will not link to your profile or count towards your
+contributions.
+
+**This repository is public, so whatever address you use is readable by anyone
+who runs `git log` on it, forever.** You have two options.
+
+*Recommended — GitHub's noreply alias.* It attributes commits to your profile
+exactly like your real address, but keeps the address itself private. Get your
+numeric user ID:
+
+```bash
+gh api user -q .id
+```
+
+Then, with that number and your username:
+
+```bash
+git config user.name "Your Name"
+git config user.email "YOUR_ID+YOUR_USERNAME@users.noreply.github.com"
+```
+
+*Or your real verified address*, if you would rather not bother and do not mind
+it being public:
 
 ```bash
 git config user.name "Your Name"
 git config user.email "you@example.com"
 ```
+
+Either way, set it **without** `--global`, as above, so it applies to this
+repository only and does not change your other projects.
+
+Decide before your first commit. Changing it afterwards means rewriting history
+and force-pushing, which breaks everyone else's clone.
 
 Set up the Python environment. Python 3.10 or newer is required:
 
