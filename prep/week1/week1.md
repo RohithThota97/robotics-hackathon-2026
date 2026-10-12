@@ -134,6 +134,16 @@ Also write down the training time on each laptop. It decides how many retrains f
 
 Draft them here, try them on the practice items, and fill in the real items on Day 1. These are notes, not code.
 
+**Filled in for the six practice items** (tasks 9–11) — the templates below stay as templates; the worked versions live in [practice/](practice/):
+
+| Template | Filled in | Holds |
+|---|---|---|
+| §5.1 below | [practice/request-format.md](practice/request-format.md) | The 7-field form plus 18 test sentences with their expected parse |
+| §5.2 below | [practice/catalog.yaml](practice/catalog.yaml) · [notes](practice/catalog.md) | All six entries; IDs pinned to the label classes by a test |
+| §5.3 below | [practice/memory-schema.md](practice/memory-schema.md) | Places and sightings for bins B1–B3, and a reshuffle walk-through |
+
+Tasks 1–8 need an NVIDIA GPU, real footage or a reply from the organizers — see [blocked-tasks.md](blocked-tasks.md).
+
 ### 5.1 Item request format
 
 What the parser produces from one spoken or typed sentence. The language model fills it in and only chooses from fixed skills (find, pick, deliver, scan, cancel). Every field is checked against the catalog before anything moves.

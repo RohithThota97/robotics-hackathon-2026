@@ -1,0 +1,129 @@
+# Practice item catalog · task 10 (week1.md §5.2)
+#
+# One entry per practice class. The look-alike pair is held as two separate
+# entries, exactly as the label classes are.
+#
+# The `id` values MUST stay identical to week1_harness.synth.items.CLASS_IDS,
+# because the same string is used for the label class, the memory tables and
+# the trial log. tests/test_catalog.py enforces this.
+#
+# German grammar note, which explains entries whose two spoken forms look
+# identical: only masculine nouns change in the accusative (der -> den).
+# Feminine (die Zange) and neuter (das Massband) nouns are unchanged, so for
+# those two items `spoken_de_nominative` and `spoken_de_accusative` are
+# deliberately the same string, not a copy-paste slip.
+#
+# Shared synonyms are also deliberate: "screwdriver" and "Schraubendreher"
+# appear in BOTH screwdriver entries so an unqualified request matches two
+# candidates and the parser must ask the clarifying question (§5.1).
+
+items:
+  - id: screwdriver_small
+    name_en: flat-head screwdriver, small
+    name_de: Schlitzschraubendreher, klein
+    spoken_de_nominative: der kleine Schraubendreher
+    spoken_de_accusative: den kleinen Schraubendreher
+    synonyms_en: [screwdriver, flathead, flat-head, small screwdriver, little screwdriver]
+    synonyms_de: [Schraubendreher, Schraubenzieher, Schlitzschraubendreher, kleiner Schraubendreher]
+    category: hand tool
+    size: about 15 cm long, 4 mm blade
+    colour: red handle, steel shaft
+    weight: about 40 g
+    grasp_type: top-down pinch on the handle
+    storage_locations: [B1, B2, B3]
+    look_alikes:
+      - id: screwdriver_large
+        distinguishing_attribute: size
+    gallery: gallery/screwdriver_small
+
+  - id: screwdriver_large
+    name_en: flat-head screwdriver, large
+    name_de: Schlitzschraubendreher, groß
+    spoken_de_nominative: der große Schraubendreher
+    spoken_de_accusative: den großen Schraubendreher
+    synonyms_en: [screwdriver, flathead, flat-head, big screwdriver, large screwdriver]
+    synonyms_de: [Schraubendreher, Schraubenzieher, Schlitzschraubendreher, großer Schraubendreher]
+    category: hand tool
+    size: about 25 cm long, 8 mm blade
+    colour: red handle, steel shaft
+    weight: about 120 g
+    grasp_type: top-down pinch on the handle
+    storage_locations: [B1, B2, B3]
+    look_alikes:
+      - id: screwdriver_small
+        distinguishing_attribute: size
+    gallery: gallery/screwdriver_large
+
+  - id: wrench
+    name_en: open-end wrench
+    name_de: Maulschlüssel
+    spoken_de_nominative: der Maulschlüssel
+    spoken_de_accusative: den Maulschlüssel
+    synonyms_en: [wrench, spanner, open-end wrench, open-ended spanner]
+    synonyms_de: [Maulschlüssel, Schraubenschlüssel, Gabelschlüssel, Schlüssel]
+    category: hand tool
+    size: about 18 cm long, 13/17 mm jaws
+    colour: bare chrome steel
+    weight: about 150 g
+    grasp_type: top-down pinch across the shaft
+    storage_locations: [B1, B2, B3]
+    look_alikes: []
+    gallery: gallery/wrench
+
+  - id: hammer
+    name_en: claw hammer
+    name_de: Hammer
+    spoken_de_nominative: der Hammer
+    spoken_de_accusative: den Hammer
+    synonyms_en: [hammer, claw hammer, mallet]
+    synonyms_de: [Hammer, Schlosserhammer, Klauenhammer]
+    category: hand tool
+    size: about 30 cm long, 300 g head
+    colour: black rubber grip, steel head
+    weight: about 450 g
+    grasp_type: top-down pinch on the shaft, below the head
+    storage_locations: [B1, B2]
+    look_alikes: []
+    gallery: gallery/hammer
+
+  - id: pliers
+    name_en: combination pliers
+    name_de: Kombizange
+    # Feminine: "die" is unchanged in the accusative.
+    spoken_de_nominative: die Kombizange
+    spoken_de_accusative: die Kombizange
+    synonyms_en: [pliers, combination pliers, pincers, gripper]
+    synonyms_de: [Zange, Kombizange, Beißzange, Greifzange]
+    category: hand tool
+    size: about 18 cm long
+    colour: blue handles, steel jaws
+    weight: about 200 g
+    grasp_type: top-down pinch across the closed handles
+    storage_locations: [B1, B2, B3]
+    look_alikes: []
+    gallery: gallery/pliers
+
+  - id: tape_measure
+    name_en: retractable tape measure
+    name_de: Maßband
+    # Neuter: "das" is unchanged in the accusative.
+    spoken_de_nominative: das Maßband
+    spoken_de_accusative: das Maßband
+    synonyms_en: [tape measure, measuring tape, tape, measure]
+    synonyms_de: [Maßband, Bandmaß, Rollbandmaß, Rollmaßband]
+    category: measuring tool
+    size: about 7 cm cased, 5 m tape
+    colour: yellow case, black trim
+    weight: about 220 g
+    grasp_type: top-down pinch on the case
+    storage_locations: [B2, B3]
+    look_alikes: []
+    gallery: gallery/tape_measure
+
+# Attribute normalisation used by the parser (§5.1). German adjective endings
+# change with case and gender, so every surface form must collapse onto one
+# catalog word before the item is matched.
+attribute_normalisation:
+  size:
+    small: [small, little, klein, kleine, kleinen, kleiner, kleines]
+    large: [large, big, groß, grosse, große, großen, großer, großes, grosser]
