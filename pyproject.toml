@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "week1-harness"
+version = "0.1.0"
+description = "CPU-only, offline, single-command runner for the Week 1 practice data loop; produces the timing table and dataset card with honest placeholder/estimate labeling."
+readme = "README.md"
+# The design uses PEP 604 `X | None` annotations in runtime-evaluated
+# dataclass fields, so Python 3.10 is the floor.
+requires-python = ">=3.10"
+
+# Mandatory runtime dependencies: nothing beyond these is needed to run the
+# full loop and produce both deliverables.
+dependencies = [
+    "pillow",
+    "numpy",
+]
+
+[project.optional-dependencies]
+# Optional real-CV path, imported lazily and used only by the Zero-shot step.
+# A CPU build of torch is expected; the full loop runs without this extra.
+realcv = [
+    "ultralytics>=8.4.0",
+    "torch",
+]
+# Test dependencies (unit tests + property-based tests).
+test = [
+    "pytest",
+    "hypothesis",
+]
+
+# Single-command entry point (R1.1). `main` is wired in task 1.2 / task 14.
+[project.scripts]
+week1-harness = "week1_harness.cli:main"
+
+[tool.setuptools.packages.find]
+# Only ship the harness package and its sub-packages; exclude tests and the
+# unrelated top-level hackathon directories (day1/, prep/, ...).
+include = ["week1_harness*"]
+namespaces = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
