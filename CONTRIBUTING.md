@@ -64,14 +64,23 @@ source .venv/bin/activate
 pip install -e ".[test]"
 ```
 
-Check it works. You should see 104 passed and 1 skipped:
+Check it works — everything should pass, with a few skips:
 
 ```bash
 pytest
 ```
 
-The one skip is expected: an optional real-inference path that needs torch and
-ultralytics, which are not installed by default.
+Skips are expected and are not failures. Two things skip on a default install:
+
+- an optional real-inference path needing `torch` and `ultralytics`, which the
+  harness does not depend on;
+- some catalog structure checks needing `PyYAML`, which it also does not
+  depend on.
+
+So the exact pass/skip counts depend on what you happen to have installed.
+What matters is that nothing **fails**. If you want the fullest run,
+`pip install pyyaml torch ultralytics` turns most of those skips into tests —
+but none of it is required to work on the repo.
 
 ## Making a change
 
