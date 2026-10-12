@@ -1,47 +1,59 @@
 # Dynamic Storage Picking · Hackathon workspace
 
-Planning workspace for Rohith's team: Challenge 3 of the Robotics & AI Hackathon 2026 at the Siemens Healthineers Innovation Center Erlangen, 22–24 Oct 2026 (confirm the final day). The documents are process plans and checklists, not project code.
+Planning workspace and code for Rohith's team: Challenge 3 of the Robotics & AI Hackathon 2026 at the Siemens Healthineers Innovation Center Erlangen, 22–24 Oct 2026 (confirm the final day). Most of this repository is process plans and checklists; the one piece of code is the Week 1 practice harness described below.
 
 ## Where to start
 
 1. [hackathon-plan.md](hackathon-plan.md): the full plan, from dataset to demo and pitch, with sources.
 2. Before the event: [prep/week1/week1.md](prep/week1/week1.md) (9–15 Oct) and [prep/week2/week2.md](prep/week2/week2.md) (16–21 Oct).
 3. On site: [Day 1](day1/day1.md), [Day 2](day2/day2.md), [Day 3](day3/day3.md), [Day 4 / Final day](day4/day4.md).
+4. Contributing: [CONTRIBUTING.md](CONTRIBUTING.md) — branch, open a pull request, get it reviewed. `main` is protected, so read this before your first change.
+
+## Documents
+
+Maintained by hand; keep this table in step when you add a document.
+
+| Document | Checkpoint or goal |
+|---|---|
+| [Dynamic Storage Picking](hackathon-plan.md) | A worker asks for an item by voice. The robot works out where the item probably is, finds it even though the storage has been rearranged, grasps it and hands it over. |
+| [Week 1 · Environments, practice loop, templates](prep/week1/week1.md) | Every laptop runs the full data loop with the network off. You know your real turnaround from filming to a model running live. |
+| [Week 2 · Rehearse, task brain, pitch, pack](prep/week2/week2.md) | You can run hand-eye calibration and a collision-aware pick sequence from your notes. |
+| [Day 1 · Understand and build a walking skeleton](day1/day1.md) | The camera detects an item and the robot moves its gripper to touch it. That proves the whole chain from pixels to robot coordinates. |
+| [Day 2 · First full voice-to-handover run](day2/day2.md) | One complete run from a spoken request to a handover. |
+| [Day 3 · Dynamic layouts and reliability](day3/day3.md) | At least 80% success over the last 20 trials on reshuffled layouts, or a clear plan to reach it by scoping down the item set. |
+| [Day 4 · Final day: reliability, rehearsal, pitch](day4/day4.md) | Reliability runs, rehearsal and the pitch. Sun 25 Oct 2026 if the event runs four days (the FAU Innovation Days page lists 22–25 Oct). |
+
+[Storage_Picking_Hackathon_Plan.pdf](Storage_Picking_Hackathon_Plan.pdf) is the source document that `hackathon-plan.md` was written from.
+
+For what changed and when, use the git history — `git log --oneline` or the commit list on GitHub.
+
+## Week 1 harness
+
+`week1_harness/` is a CPU-only, offline runner for the Week 1 practice data loop. It generates synthetic frames, walks them through the eight loop steps, and renders the two Week 1 deliverables — the timing table and the dataset card — with every non-real value labelled as a placeholder or an estimate.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[test]"
+pytest
+```
+
+Expect 104 passed and 1 skipped. The skip is an optional real-inference path that needs `torch` and `ultralytics`; it skips rather than fails on a CPU-only machine.
+
+```
+week1_harness/
+  steps/        the eight loop steps: film, extract, auto_label, review,
+                train, zero_shot, score, live_test
+  synth/        synthetic frames: practice items, scenes, Pillow rendering
+  reporters/    renders the timing table and the dataset card
+tests/          unit tests and Hypothesis property tests
+```
+
+**Not finished yet:** `main()` in [week1_harness/cli.py](week1_harness/cli.py) is still a stub (`TODO(task 14.2)`). Running `week1-harness` parses its arguments and exits 0 **without writing any deliverables** — the pipeline wiring and the `output.py` module it calls for have not been written. The steps, the frame generation and both reporters are implemented and tested; only the top-level wiring is missing.
 
 ## Conventions
 
 - Day and week files link back to the plan in their first line.
 - Sources are numbered across all files: [1]–[10] in the plan, [11]–[15] in week 1, [16] onward in week 2. Reuse the number when you cite the same source again.
 - Numbers marked as targets are team goals, not standards.
-
-## Keeping this README current
-
-A Kiro hook ([.kiro/hooks/update-readme.json](.kiro/hooks/update-readme.json)) runs [.kiro/scripts/update_readme.py](.kiro/scripts/update_readme.py) after Kiro writes, edits, deletes or moves a file, and after its shell commands. The script rewrites only the generated block below: the document index and the recent changes. It also recreates this file if it goes missing. Everything above the block is written by hand.
-
-After editing files outside Kiro, run it yourself: `python3 .kiro/scripts/update_readme.py`
-
-<!-- AUTO:START · generated by .kiro/scripts/update_readme.py, edits inside this block are overwritten -->
-
-## Documents
-
-7 Markdown documents: root first, then by folder.
-
-| Document | File | Summary | Updated |
-|---|---|---|---|
-| [Dynamic Storage Picking](hackathon-plan.md) | `hackathon-plan.md` | Goal: A worker asks for an item by voice. The robot works out where the item probably is, finds it even though the storage has been rearranged, grasps it and hands it over. | 2026-10-09 17:30 |
-| [Day 1 · Understand and build a walking skeleton](day1/day1.md) | `day1/day1.md` | Day 1 checkpoint: The camera detects an item and the robot moves its gripper to touch it. That proves the whole chain from pixels to robot coordinates. | 2026-10-09 17:30 |
-| [Day 2 · First full voice-to-handover run](day2/day2.md) | `day2/day2.md` | Day 2 checkpoint: One complete run from a spoken request to a handover. | 2026-10-09 17:30 |
-| [Day 3 · Dynamic layouts and reliability](day3/day3.md) | `day3/day3.md` | Day 3 checkpoint: At least 80% success over the last 20 trials on reshuffled layouts, or a clear plan to reach it by scoping down the item set. | 2026-10-09 17:30 |
-| [Day 4 · Final day: reliability, rehearsal, pitch](day4/day4.md) | `day4/day4.md` | Date: Sun 25 Oct 2026 if the event runs four days (the FAU Innovation Days page lists 22–25 Oct). | 2026-10-09 17:30 |
-| [Week 1 · Environments, practice loop, templates](prep/week1/week1.md) | `prep/week1/week1.md` | Week 1 checkpoint: Every laptop runs the full data loop with the network off. You know your real turnaround from filming to a model running live. | 2026-10-09 18:37 |
-| [Week 2 · Rehearse, task brain, pitch, pack](prep/week2/week2.md) | `prep/week2/week2.md` | Week 2 checkpoint: You can run hand-eye calibration and a collision-aware pick sequence from your notes. | 2026-10-09 18:38 |
-
-## Recent changes
-
-Newest first; the last 25 are kept.
-
-| When | Change | Document |
-|---|---|---|
-| 2026-10-09 19:02 | index created | 7 documents |
-
-<!-- AUTO:END -->
+- This repository is public. Nothing shared privately by the organizers goes in it, and no model weights or datasets — those are gitignored and copied on site.
