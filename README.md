@@ -49,7 +49,23 @@ week1_harness/
 tests/          unit tests and Hypothesis property tests
 ```
 
-**Not finished yet:** `main()` in [week1_harness/cli.py](week1_harness/cli.py) is still a stub (`TODO(task 14.2)`). Running `week1-harness` parses its arguments and exits 0 **without writing any deliverables** — the pipeline wiring and the `output.py` module it calls for have not been written. The steps, the frame generation and both reporters are implemented and tested; only the top-level wiring is missing.
+Run the whole loop with one command:
+
+```bash
+week1-harness --out ./out
+```
+
+It runs all eight steps on CPU, prints both deliverables, and writes three files into `--out`:
+
+| File | What it holds |
+|---|---|
+| `timing_table.md` | One row per step with its time, each tagged `REAL`, `PLACEHOLDER` or `ESTIMATE` |
+| `dataset_card.md` | Classes, counts per class, sessions and known gaps |
+| `run.json` | The structured results, every value keeping its marker and reason |
+
+Each file is written atomically, so a crash never leaves a half-written deliverable. `--no-zero-shot` forces the zero-shot placeholder; `--seed` makes a run reproducible; a failing step exits non-zero and writes nothing at all.
+
+**Every number here is synthetic.** The times are real CPU measurements of synthetic work, and training, scoring and the live test are stubs — which is why each value carries a marker. These are not Week 1 answers; real numbers come from the real loop on real footage ([prep/week1/week1.md](prep/week1/week1.md) §4).
 
 ## Conventions
 
