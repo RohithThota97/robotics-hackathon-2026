@@ -64,14 +64,23 @@ source .venv/bin/activate
 pip install -e ".[test]"
 ```
 
-Check it works. You should see 104 passed and 1 skipped:
+Check it works — everything should pass, with a few skips:
 
 ```bash
 pytest
 ```
 
-The one skip is expected: an optional real-inference path that needs torch and
-ultralytics, which are not installed by default.
+Skips are expected and are not failures. Two things skip on a default install:
+
+- an optional real-inference path needing `torch` and `ultralytics`, which the
+  harness does not depend on;
+- some catalog structure checks needing `PyYAML`, which it also does not
+  depend on.
+
+So the exact pass/skip counts depend on what you happen to have installed.
+What matters is that nothing **fails**. If you want the fullest run,
+`pip install pyyaml torch ultralytics` turns most of those skips into tests —
+but none of it is required to work on the repo.
 
 ## Making a change
 
@@ -210,16 +219,25 @@ gh pr diff 7                # read PR #7's changes in the terminal
 
 ## Current state of the code
 
-Read this before you report the harness as broken:
+The harness is complete and runs end to end:
 
-`week1_harness/cli.py` has a working argument parser, but `main()` is still a
-stub — see the `TODO(task 14.2)` at
-[week1_harness/cli.py:90](week1_harness/cli.py:90). Running `week1-harness`
-parses your arguments and exits 0 **without producing the timing table or the
-dataset card.** The pipeline wiring and the `output.py` module it calls for have
-not been written yet. The eight step components, the synthetic frame
-generation and both reporters are implemented and tested; only the top-level
-wiring is missing.
+```bash
+week1-harness --out ./out
+```
+
+That runs all eight steps on CPU, prints the timing table and the dataset card,
+and writes `timing_table.md`, `dataset_card.md` and `run.json` into `--out`.
+
+Two things to know before you change it:
+
+- **Every value carries a marker.** `REAL`, `PLACEHOLDER` or `ESTIMATE`, and a
+  non-real value cannot be constructed without a reason — see
+  [week1_harness/markers.py](week1_harness/markers.py). If you add a step or a
+  number, label it. This is the one invariant the whole harness exists to
+  protect, and the tests enforce it.
+- **The numbers are synthetic.** Real Week 1 figures come from the real loop on
+  real footage ([prep/week1/week1.md](prep/week1/week1.md) §4), not from here.
+  Never copy a harness time into a plan or the pitch.
 
 ## Layout
 

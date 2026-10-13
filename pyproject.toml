@@ -31,7 +31,7 @@ test = [
     "hypothesis",
 ]
 
-# Single-command entry point (R1.1). `main` is wired in task 1.2 / task 14.
+# Single-command entry point (R1.1).
 [project.scripts]
 week1-harness = "week1_harness.cli:main"
 

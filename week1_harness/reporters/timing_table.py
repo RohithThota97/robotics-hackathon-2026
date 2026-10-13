@@ -32,9 +32,10 @@ either character, but the escaping keeps the table well-formed if one ever does.
 
 from __future__ import annotations
 
+import dataclasses
 from typing import TYPE_CHECKING
 
-from week1_harness.markers import Marker
+from week1_harness.markers import Marker, MarkedValue
 
 if TYPE_CHECKING:  # pragma: no cover - imported only for type checking
     from week1_harness.datamodel import StepResult
@@ -57,6 +58,33 @@ HONESTY_NOTICE = (
 # and time.
 _HEADER = "| # | Step | How | Time |"
 _SEPARATOR = "|---|------|-----|------|"
+
+
+def _format_seconds(value: float) -> str:
+    """Format a duration for display without flattening it to zero.
+
+    Two decimals suit the step times people compare, but the fast synthetic
+    steps run in well under 10 ms, and ``f"{0.000134:.2f}"`` is ``"0.00"`` --
+    which reads as "took no time at all". Sub-centisecond values therefore fall
+    back to two significant figures, so a real measurement is never displayed
+    as zero.
+    """
+    if value and abs(value) < 0.01:
+        return f"{value:.2g}"
+    return f"{value:.2f}"
+
+
+def _time_cell(time: MarkedValue) -> str:
+    """Render a time cell, rounding float seconds to 2 decimals.
+
+    Raw ``time.perf_counter()`` deltas render as ``2.9141306629999804s``, which
+    is noise in a document people read. Only the *rendered* value is rounded --
+    the ``MarkedValue`` itself keeps full precision for ``run.json`` -- and the
+    marker tag is preserved, so a rounded estimate is still visibly an estimate.
+    """
+    if isinstance(time.value, float):
+        time = dataclasses.replace(time, value=_format_seconds(time.value))
+    return time.render()
 
 
 def _cell(text: object) -> str:
@@ -113,7 +141,7 @@ def render_timing_table(results: list[StepResult]) -> str:
             n_estimate += 1
         lines.append(
             f"| {result.number} | {_cell(result.name)} | {_cell(result.how)} "
-            f"| {_cell(result.time.render())} |"
+            f"| {_cell(_time_cell(result.time))} |"
         )
 
     # Total row (R13.5): REAL CPU steps only, never presentable as a full-loop
